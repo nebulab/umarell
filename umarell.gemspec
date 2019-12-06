@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
             .split($RS)
   s.bindir = 'exe'
   s.executables = ['umarell']
+  s.require_path = 'lib'
   s.extra_rdoc_files = ['LICENSE.txt', 'README.md']
   s.homepage = 'https://github.com/nebulab/umarell'
   s.licenses = ['MIT']
