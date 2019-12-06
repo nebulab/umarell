@@ -23,12 +23,17 @@ module Umarell
 
     # Entry point to start the application
     def run
-      parse_options
-      create_args
+      parse_args
       run_commands
     end
 
     private
+
+    def parse_args
+      parse_options
+      @target = ARGV.pop
+      @args[:rubocop] = ['-a'] if @autofix
+    end
 
     def parse_options
       OptionParser.new do |opts|
@@ -37,13 +42,11 @@ module Umarell
         opts.on('-a', '--autofix', 'Autofix violations (if supported)') do
           @autofix = true
         end
+        opts.on_tail('-v', '--version', 'Show version') do
+          puts Version::STRING
+          exit
+        end
       end.parse!
-
-      @target = ARGV.pop
-    end
-
-    def create_args
-      @args[:rubocop] = ['-a'] if @autofix
     end
 
     def run_commands
@@ -53,8 +56,15 @@ module Umarell
     end
 
     def run_command(name, command, args)
-      message = "\n\e[35m[Umarell] Running #{name}...\e[0m"
-      system "echo '#{message}'; #{command} #{args.join(' ')} #{@target}"
+      header = decorate_message("Running #{name}")
+      footer = decorate_message("#{name} run complete\n")
+      full_command = "#{command} #{args.join(' ')} #{@target}"
+
+      system "echo '#{header}'; #{full_command}; echo '#{footer}'"
+    end
+
+    def decorate_message(string)
+      "\e[1;94m~~~~~~~ [Umarell] #{string}\e[0m"
     end
   end
 end
