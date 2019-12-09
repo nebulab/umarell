@@ -1,70 +1,53 @@
 # frozen_string_literal: true
 
-require 'optparse'
+require_relative 'arguments'
+require_relative 'command'
 
 module Umarell
   TOOLS = {
-    bundler_audit: 'bundler-audit check --update',
-    brakeman: 'brakeman -w2 -q',
-    rubocop: 'rubocop',
-    reek: 'reek',
-    rails_best_practices: 'rails_best_practices',
-    fasterer: 'fasterer'
+    'bundler-audit' => ['check', '--update'],
+    'brakeman' => ['-w2', '-q'],
+    'rubocop' => [],
+    'reek' => [],
+    'rails_best_practices': [],
+    'fasterer' => []
   }.freeze
+
+  AUTOFIX_SUPPORT = ['rubocop'].freeze
 
   # The class responsible of handling command line logic
   class CLI
-    def initialize(tools = TOOLS)
+    def initialize(tools = TOOLS, arguments = Arguments.new)
       @tools = tools
-      @autofix = false
-      @args = {}
-      @target = ''
+      @arguments = arguments
     end
 
     # Entry point to start the application
     def run
-      parse_args
+      @arguments.parse
       run_commands
     end
 
     private
 
-    def parse_args
-      parse_options
-      @target = ARGV.pop
-      @args[:rubocop] = ['-a'] if @autofix
-    end
-
-    def parse_options
-      OptionParser.new do |opts|
-        opts.banner = 'Usage: umarell [options] [target]'
-
-        opts.on('-a', '--autofix', 'Autofix violations (if supported)') do
-          @autofix = true
-        end
-        opts.on_tail('-v', '--version', 'Show version') do
-          puts Version::STRING
-          exit
-        end
-      end.parse!
-    end
-
     def run_commands
-      @tools.each do |name, command|
-        run_command(name, command, @args.fetch(name) { [] })
+      @tools.each do |name, options|
+        arguments = command_arguments(name, options)
+        Command.new(name, arguments).run
       end
     end
 
-    def run_command(name, command, args)
-      header = decorate_message("Running #{name}")
-      footer = decorate_message("#{name} run complete\n")
-      full_command = "#{command} #{args.join(' ')} #{@target}"
+    def command_arguments(name, options)
+      command_arguments = command_options(name, options)
+      return command_arguments unless @arguments.target
 
-      system "echo '#{header}'; #{full_command}; echo '#{footer}'"
+      command_arguments + [@arguments.target]
     end
 
-    def decorate_message(string)
-      "\e[1;94m~~~~~~~ [Umarell] #{string}\e[0m"
+    def command_options(name, base_options)
+      return base_options unless AUTOFIX_SUPPORT.include?(name)
+
+      base_options + ['-a']
     end
   end
 end

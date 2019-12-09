@@ -1,36 +1,33 @@
 # frozen_string_literal: true
 
 describe Umarell::CLI do
-  it 'runs a command on a target' do
-    cli = described_class.new(ls: 'ls')
-    ARGV.replace(['README.md'])
-
-    expect { cli.run }.to output(/README.md/).to_stdout_from_any_process
-  end
-
-  it 'runs all configured tools' do
-    cli = described_class.new
-    allow(cli).to receive(:system)
-    ARGV.replace([])
+  it 'calls commands with arguments' do
+    arguments = instance_spy(Umarell::Arguments, target: 'a_target')
+    command = instance_spy(Umarell::Command)
+    tools = { 'a_command' => ['-opt'] }
+    cli = described_class.new(tools, arguments)
+    allow(Umarell::Command).to receive(:new)
+      .with('a_command', ['-opt', 'a_target'])
+      .and_return(command)
 
     cli.run
 
-    expect(cli).to have_received(:system).with(/bundler-audit/)
-    expect(cli).to have_received(:system).with(/brakeman/)
-    expect(cli).to have_received(:system).with(/rubocop/)
-    expect(cli).to have_received(:system).with(/reek/)
-    expect(cli).to have_received(:system).with(/rails_best_practices/)
-    expect(cli).to have_received(:system).with(/fasterer/)
+    expect(arguments).to have_received(:parse)
+    expect(command).to have_received(:run)
   end
 
-  it 'supports autofix option' do
-    cli = described_class.new
-    allow(cli).to receive(:system)
-    ARGV.replace(['-a'])
+  it 'calls supported tools with autofix option' do
+    arguments = instance_spy(Umarell::Arguments, target: nil, autofix?: true)
+    command = instance_spy(Umarell::Command)
+    tools = { 'rubocop' => [] }
+    cli = described_class.new(tools, arguments)
+    allow(Umarell::Command).to receive(:new)
+      .with('rubocop', ['-a'])
+      .and_return(command)
 
     cli.run
 
-    expect(cli).to have_received(:system).at_least(:once)
-    expect(cli).to have_received(:system).with(/rubocop -a/)
+    expect(arguments).to have_received(:parse)
+    expect(command).to have_received(:run)
   end
 end
