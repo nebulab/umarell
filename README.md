@@ -47,6 +47,7 @@ Umarell runs the following tools:
 - [bundler-audit](https://github.com/rubysec/bundler-audit)
 - [brakeman](https://github.com/presidentbeef/brakeman)
 - [rubocop](https://github.com/rubocop-hq/rubocop)
+- [erb-lint](https://github.com/Shopify/erb-lint)
 - [reek](https://github.com/troessner/reek)
 - [rails_best_practices](https://github.com/flyerhzm/rails_best_practices)
 - [fasterer](https://github.com/DamirSvrtan/fasterer)
