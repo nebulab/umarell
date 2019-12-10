@@ -12,8 +12,7 @@ Gem::Specification.new do |s|
   s.description = 'All in one Ruby static code analyzer'
 
   s.email = 'hello@nebulab.it'
-  s.files = `git ls-files bin lib LICENSE.txt README.md`
-            .split($RS)
+  s.files = `git ls-files assets exe lib LICENSE.txt README.md`.split($RS)
   s.bindir = 'exe'
   s.executables = ['umarell']
   s.require_path = 'lib'
@@ -22,18 +21,19 @@ Gem::Specification.new do |s|
   s.licenses = ['MIT']
   s.summary = 'All in one Ruby static code analyzer'
 
-  s.add_runtime_dependency('brakeman', '~> 4')
+  s.add_runtime_dependency('brakeman', '~> 4.7')
   s.add_runtime_dependency('bundler-audit', '< 1')
+  s.add_runtime_dependency('erb_lint', '< 1')
   s.add_runtime_dependency('fasterer', '< 1')
-  s.add_runtime_dependency('rails_best_practices', '~> 1')
-  s.add_runtime_dependency('reek', '~> 5')
+  s.add_runtime_dependency('rails_best_practices', '~> 1.19')
+  s.add_runtime_dependency('reek', '~> 5.5')
   s.add_runtime_dependency('rubocop', '< 1')
-  s.add_runtime_dependency('rubocop-performance', '~> 1')
-  s.add_runtime_dependency('rubocop-rails', '~> 2')
+  s.add_runtime_dependency('rubocop-performance', '~> 1.5')
+  s.add_runtime_dependency('rubocop-rails', '~> 2.4')
   s.add_runtime_dependency('rubocop-rake', '< 1')
-  s.add_runtime_dependency('rubocop-rspec', '~> 1')
+  s.add_runtime_dependency('rubocop-rspec', '~> 1.37')
 
-  s.add_development_dependency('bundler', '~> 2')
-  s.add_development_dependency('rake', '~> 13')
-  s.add_development_dependency('rspec', '~> 3')
+  s.add_development_dependency('bundler', '~> 2.0')
+  s.add_development_dependency('rake', '~> 13.0')
+  s.add_development_dependency('rspec', '~> 3.9')
 end
