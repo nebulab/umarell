@@ -6,7 +6,7 @@ require_relative 'command'
 module Umarell
   TOOLS = {
     'bundler-audit' => ['check', '--update'],
-    'brakeman' => ['-w2', '-q'],
+    'brakeman' => ['-w2', '-q', '--no-pager', '--no-summary'],
     'rubocop' => [],
     'reek' => [],
     'rails_best_practices': [],
