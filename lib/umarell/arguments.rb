@@ -14,7 +14,7 @@ module Umarell
     def initialize
       @autofix = false
       @modified = false
-      @target = nil
+      @target = './'
     end
 
     # Parse command line arguments

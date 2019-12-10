@@ -8,12 +8,13 @@ module Umarell
     'bundler-audit' => ['check', '--update'],
     'brakeman' => ['-w2', '-q', '--no-pager', '--no-summary'],
     'rubocop' => [],
+    'erblint' => [],
     'reek' => [],
     'rails_best_practices': [],
     'fasterer' => []
   }.freeze
 
-  AUTOFIX_SUPPORT = ['rubocop'].freeze
+  AUTOFIX_SUPPORT = %w[rubocop erblint].freeze
 
   # The class responsible of handling command line logic
   class CLI
