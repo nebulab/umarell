@@ -9,12 +9,13 @@ module Umarell
 
     alias autofix? autofix
 
+    DEFAULT_TARGET = './'
     MODIFIED_FILES_TARGET = '`git ls-files -mo --exclude-standard %s`'
 
     def initialize
       @autofix = false
       @modified = false
-      @target = './'
+      @target = DEFAULT_TARGET
     end
 
     # Parse command line arguments
@@ -37,7 +38,7 @@ module Umarell
     end
 
     def parse_target
-      last_argument = ARGV.pop
+      last_argument = ARGV.pop || DEFAULT_TARGET
       @target = if @modified
                   MODIFIED_FILES_TARGET % last_argument
                 else

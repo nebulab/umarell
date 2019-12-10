@@ -7,6 +7,15 @@ describe Umarell::Arguments do
     allow(arguments).to receive(:exit)
   end
 
+  it 'uses default target if not present' do
+    ARGV.replace([])
+
+    arguments.parse
+
+    expect(arguments.target).to eq('./')
+    expect(arguments).not_to have_received(:exit)
+  end
+
   it 'parses target if present' do
     ARGV.replace(['a_target'])
 
