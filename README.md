@@ -2,6 +2,7 @@
 
 Umarell is an all in one Ruby static code analyzer.
 Umarell gives you (*unwanted?*) advice on your code just like an [italian old man watching a construction site](https://en.wikipedia.org/wiki/Umarell).
+
 ![Umarell](https://raw.githubusercontent.com/nebulab/umarell/master/assets/umarell.jpg?raw=true "Umarell")
 
 ## Installation
@@ -31,7 +32,9 @@ $ umarell /path/to/ruby-application
 $ umarell -h
 
 usage: umarell [options] [target]
-    -a, --autofix       Autofix violations (if supported)
+  -a, --autofix    Autofix violations (if supported)
+  -m, --modified   Run on modified files
+  -v, --version    Show version
 ```
 
 ## Requirements
